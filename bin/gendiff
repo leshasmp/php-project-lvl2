@@ -1,0 +1,23 @@
+#!/usr/bin/env php
+<?php
+require __DIR__ . '/../vendor/docopt/docopt/src/docopt.php';
+
+$doc = <<<DOC
+gendiff -h
+
+Generate diff
+
+Usage:
+  gendiff (-h|--help)
+  gendiff (-v|--version)
+
+Options:
+  -h --help                     Show this screen
+  -v --version                  Show version
+DOC;
+
+$handler = new \Docopt\Handler(array(
+    'help'=>true,
+    'optionsFirst'=>false,
+));
+$handler->handle($doc, $argv);

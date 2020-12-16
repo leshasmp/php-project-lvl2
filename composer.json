@@ -1,0 +1,16 @@
+{
+    "name": "hexlet/code",
+    "authors": [
+        {
+            "name": "alexey-melekhov1989",
+            "email": "alexey-melekhov1989@yandex.ru"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "docopt/docopt": "^1.0"
+    },
+    "bin": [
+        "bin/gendiff"
+    ]
+}
