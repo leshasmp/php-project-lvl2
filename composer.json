@@ -1,5 +1,7 @@
 {
     "name": "hexlet/code",
+    "description": "Difference calculator",
+    "license": "MIT",
     "authors": [
         {
             "name": "alexey-melekhov1989",
