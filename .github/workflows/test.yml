@@ -1,4 +1,4 @@
-name: test-coverage
+name: test
 
 on:
   push:
@@ -21,4 +21,4 @@ jobs:
         run: make install
 
       - name: action
-        run: make test-coverage
+        run: make test
