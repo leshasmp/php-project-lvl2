@@ -5,6 +5,8 @@
 
 [![](https://github.com/leshasmp/php-project-lvl1/workflows/lint/badge.svg)](https://github.com/leshasmp/php-project-lvl1/actions?query=workflow%3Alint)
 
+[![Test Coverage](https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/test_coverage)](https://codeclimate.com/github/codeclimate/codeclimate/test_coverage)
+
 # Difference calculator
 
 Difference Calculator - A program that determines the difference between two data structures. This is a popular problem, for which there are many online services, for example: http://www.jsondiff.com/. A similar mechanism is used when outputting tests or automatically tracking changes in configuration files.

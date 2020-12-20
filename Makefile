@@ -7,7 +7,7 @@ validate:
 lint:
 	composer run-script phpcs -- --standard=PSR12 src bin
 
-test:
+test-coverage:
 	composer run-script phpunit tests
 
 autoload:

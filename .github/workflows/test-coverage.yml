@@ -1,4 +1,4 @@
-name: differ-test
+name: test-coverage
 
 on:
   push:
@@ -21,4 +21,4 @@ jobs:
         run: make install
 
       - name: action
-        run: make test
+        run: make test-coverage
