@@ -10,7 +10,7 @@ lint:
 test:
 	composer run-script phpunit tests
 
-test:
+test-coverage:
 	composer run-script phpunit tests -- --coverage-clover build/logs/clover.xml
 
 autoload:
