@@ -1,0 +1,24 @@
+name: differ-test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Validate composer.json and composer.lock
+        run: make validate
+
+      - name: install packages
+        run: make install
+
+      - name: action
+        run: make test
