@@ -23,10 +23,10 @@ jobs:
       - name: install packages
         run: make install
 
-      - name: action
+      - name: action lint
         run: make lint
 
-      - name: action
+      - name: action test
         run: make test
 
       - name: Run test & publish code coverage
