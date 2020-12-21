@@ -17,6 +17,8 @@ if (file_exists($autoloadPath1)) {
 
 use function Differ\Differ\genDiff;
 
+use function Differ\Parsers\parseFile;
+
 $doc = <<<DOC
 gendiff -h
 
@@ -35,7 +37,13 @@ DOC;
 
 $args = Docopt::handle($doc);
 
-$diff = genDiff($args['<firstFile>'], $args['<secondFile>']);
+$firstFile = parseFile($args['<firstFile>']);
+$secondFile = parseFile($args['<secondFile>']);
+
+ksort($firstFile);
+ksort($secondFile);
+
+$diff = genDiff($firstFile, $secondFile);
 print_r($diff);
 
 $handler = new \Docopt\Handler(array(
