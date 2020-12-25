@@ -4,28 +4,40 @@ declare(strict_types=1);
 
 namespace Differ\Differ;
 
-function genDiff(array $array1, array $array2): string
+function buildDiff(array $firstFile, array $secondFile): array
 {
-    $result = '';
-    foreach ($array1 as $key1 => $value1) {
-        if (!array_key_exists($key1, $array2)) {
-            $result .= "  - {$key1}: {$value1} \n";
+    ksort($firstFile);
+    ksort($secondFile);
+
+    $resArray = [];
+    foreach ($secondFile as $secondFileKey => $secondFileValue) {
+        if (!array_key_exists($secondFileKey, $firstFile)) {
+            $resArray["+ {$secondFileKey}"] = $secondFileValue;
         }
-        foreach ($array2 as $key2 => $value2) {
-            if ($key1 == $key2 && $value1 !== $value2) {
-                $result .= "  - {$key1}: {$value1} \n";
-                $result .= "  + {$key2}: {$value2} \n";
+        foreach ($firstFile as $firstFileKey => $firstFileValue) {
+            if (!array_key_exists($firstFileKey, $secondFile)) {
+                $resArray["- {$firstFileKey}"] = $firstFileValue;
             }
-            if ($key1 == $key2 && $value1 == $value2) {
-                $result .= "    {$key1}: {$value1} \n";
+            if ($firstFileKey == $secondFileKey && $secondFileValue !== $firstFileValue) {
+                $resArray["- {$firstFileKey}"] = $firstFileValue;
+                $resArray["+ {$secondFileKey}"] = $secondFileValue;
             }
-        }
-    }
-    foreach ($array2 as $key2 => $value2) {
-        if (!array_key_exists($key2, $array1)) {
-            $result .= "  + {$key2}: {$value2} \n";
+            if (array_key_exists($firstFileKey, $secondFile) && $secondFileValue === $firstFileValue) {
+                $resArray["  {$firstFileKey}"] = $firstFileValue;
+            }
         }
     }
 
-    return "{ \n{$result}}\n";
+    return $resArray;
+}
+
+function genDiff(array $firstFile, array $secondFile): string
+{
+
+    $resArray = buildDiff($firstFile, $secondFile);
+
+    $resStr = (string) json_encode($resArray, JSON_PRETTY_PRINT);
+    $resStr = str_replace('"', '', $resStr);
+
+    return "{$resStr} \n";
 }

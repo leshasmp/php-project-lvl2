@@ -40,9 +40,6 @@ $args = Docopt::handle($doc);
 $firstFile = parseFile($args['<firstFile>']);
 $secondFile = parseFile($args['<secondFile>']);
 
-ksort($firstFile);
-ksort($secondFile);
-
 $diff = genDiff($firstFile, $secondFile);
 print_r($diff);
 

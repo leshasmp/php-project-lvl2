@@ -14,13 +14,12 @@ class DifferTest extends TestCase
 {
     public function testDifferString(): void
     {
+        $actual = file_get_contents('tests/fixtures/diff-actual.txt');
+
         $firstFile = parseFile('tests/fixtures/filepath1.json');
         $secondFile = parseFile('tests/fixtures/filepath2.json');
 
-        ksort($firstFile);
-        ksort($secondFile);
-
-        $diff = genDiff($firstFile, $firstFile);
+        $diff = genDiff($firstFile, $secondFile);
 
         $actual = file_get_contents('tests/fixtures/diff-actual.txt');
 
@@ -32,10 +31,7 @@ class DifferTest extends TestCase
         $firstFile = parseFile('tests/fixtures/filepath1.json');
         $secondFile = parseFile('tests/fixtures/filepath2.yml');
 
-        ksort($firstFile);
-        ksort($secondFile);
-
-        $diff = genDiff($firstFile, $firstFile);
+        $diff = genDiff($firstFile, $secondFile);
 
         $this->assertEquals(
             $actual,
@@ -45,10 +41,7 @@ class DifferTest extends TestCase
         $firstFile = parseFile('tests/fixtures/filepath1.yml');
         $secondFile = parseFile('tests/fixtures/filepath2.yml');
 
-        ksort($firstFile);
-        ksort($secondFile);
-
-        $diff = genDiff($firstFile, $firstFile);
+        $diff = genDiff($firstFile, $secondFile);
 
         $this->assertEquals(
             $actual,
