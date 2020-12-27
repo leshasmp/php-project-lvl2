@@ -4,40 +4,52 @@ declare(strict_types=1);
 
 namespace Differ\Differ;
 
-function buildDiff(array $firstFile, array $secondFile): array
+use function Differ\Parsers\parseFile;
+use function Funct\Collection\union;
+
+function genDiff(string $pathFile1, string $pathFile2)
 {
-    ksort($firstFile);
-    ksort($secondFile);
+    $firstArray = parseFile($pathFile1);
+    $secondArray = parseFile($pathFile2);
 
-    $resArray = [];
-    foreach ($secondFile as $secondFileKey => $secondFileValue) {
-        if (!array_key_exists($secondFileKey, $firstFile)) {
-            $resArray["+ {$secondFileKey}"] = $secondFileValue;
+    $firstKeys = array_keys($firstArray);
+    $secondKeys = array_keys($secondArray);
+
+    $keys = union($firstKeys, $secondKeys);
+    sort($keys);
+
+    $resKeysStatus = array_map(function ($key) use ($firstArray, $secondArray) {
+        if (!array_key_exists($key, $secondArray)) {
+            return [['key' => $key, 'status' => 'delete', 'array' => $firstArray[$key]]];
         }
-        foreach ($firstFile as $firstFileKey => $firstFileValue) {
-            if (!array_key_exists($firstFileKey, $secondFile)) {
-                $resArray["- {$firstFileKey}"] = $firstFileValue;
-            }
-            if ($firstFileKey == $secondFileKey && $secondFileValue !== $firstFileValue) {
-                $resArray["- {$firstFileKey}"] = $firstFileValue;
-                $resArray["+ {$secondFileKey}"] = $secondFileValue;
-            }
-            if (array_key_exists($firstFileKey, $secondFile) && $secondFileValue === $firstFileValue) {
-                $resArray["  {$firstFileKey}"] = $firstFileValue;
-            }
+        if (array_key_exists($key, $secondArray)
+            && !array_key_exists($key, $firstArray)) {
+            return [['key' => $key, 'status' => 'add', 'array' => $secondArray[$key]]];
         }
-    }
+        if (array_key_exists($key, $secondArray)
+            && array_key_exists($key, $firstArray)
+            && $secondArray[$key] !== $firstArray[$key]) {
+            return [['key' => $key, 'status' => 'change', 'oldValue' => $firstArray[$key], 'newValue' => $secondArray[$key]]];
+        }
+        return [['key' => $key, 'status' => 'not-change', 'array' => $firstArray[$key]]];
+    }, $keys);
 
-    return $resArray;
-}
+    $resKeysStatus = array_merge(...$resKeysStatus);
 
-function genDiff(array $firstFile, array $secondFile): string
-{
+    $resItems = array_map(function ($item) {
+        switch ($item['status']) {
+            case 'delete':
+                return "\n  - {$item['key']}: {$item['array']}";
+            case 'add':
+                return "\n  + {$item['key']}: {$item['array']}";
+            case 'change':
+                return "\n  - {$item['key']}: {$item['oldValue']}\n  + {$item['key']}: {$item['newValue']}";
+            case 'not-change':
+                return "\n    {$item['key']}: {$item['array']}";
+        }
+    }, $resKeysStatus);
 
-    $resArray = buildDiff($firstFile, $secondFile);
+    $resItems = implode($resItems);
 
-    $resStr = (string) json_encode($resArray, JSON_PRETTY_PRINT);
-    $resStr = str_replace('"', '', $resStr);
-
-    return "{$resStr} \n";
+    return "{ $resItems \n}\n";;
 }

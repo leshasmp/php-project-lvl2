@@ -6,42 +6,39 @@ namespace Differ\Tests\DifferTest;
 
 use PHPUnit\Framework\TestCase;
 
-use function Differ\Parsers\parseFile;
-
 use function Differ\Differ\genDiff;
 
 class DifferTest extends TestCase
 {
     public function testDifferString(): void
     {
-        $actual = file_get_contents('tests/fixtures/diff-actual.txt');
 
-        $firstFile = parseFile('tests/fixtures/filepath1.json');
-        $secondFile = parseFile('tests/fixtures/filepath2.json');
+        $pathFile1 = 'tests/fixtures/filepath1.json';
+        $pathFile2 = 'tests/fixtures/filepath2.json';
 
-        $diff = genDiff($firstFile, $secondFile);
+        $diff = trim(genDiff($pathFile1, $pathFile2));
 
-        $actual = file_get_contents('tests/fixtures/diff-actual.txt');
-
-        $this->assertEquals(
-            $actual,
-            $diff
-        );
-
-        $firstFile = parseFile('tests/fixtures/filepath1.json');
-        $secondFile = parseFile('tests/fixtures/filepath2.yml');
-
-        $diff = genDiff($firstFile, $secondFile);
+        $actual = trim(file_get_contents('tests/fixtures/diff-actual.txt'));
 
         $this->assertEquals(
             $actual,
             $diff
         );
 
-        $firstFile = parseFile('tests/fixtures/filepath1.yml');
-        $secondFile = parseFile('tests/fixtures/filepath2.yml');
+        $pathFile1 = 'tests/fixtures/filepath1.json';
+        $pathFile2 = 'tests/fixtures/filepath2.yml';
 
-        $diff = genDiff($firstFile, $secondFile);
+        $diff = trim(genDiff($pathFile1, $pathFile2));
+
+        $this->assertEquals(
+            $actual,
+            $diff
+        );
+
+        $pathFile1 = 'tests/fixtures/filepath1.yml';
+        $pathFile2 = 'tests/fixtures/filepath2.yml';
+
+        $diff = trim(genDiff($pathFile1, $pathFile2));
 
         $this->assertEquals(
             $actual,
