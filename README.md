@@ -20,3 +20,5 @@ Difference Calculator - A program that determines the difference between two dat
 [![asciicast](https://asciinema.org/a/380023.svg)](https://asciinema.org/a/380023)
 
 [![asciicast](https://asciinema.org/a/380379.svg)](https://asciinema.org/a/380379)
+
+[![asciicast](https://asciinema.org/a/382220.svg)](https://asciinema.org/a/382220)

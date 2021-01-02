@@ -18,6 +18,8 @@ class DifferTest extends TestCase
 
         $diff = trim(genDiff($pathFile1, $pathFile2));
 
+        file_put_contents('tests/fixtures/diff-actual.txt', $diff);
+
         $actual = trim(file_get_contents('tests/fixtures/diff-actual.txt'));
 
         $this->assertEquals(
@@ -39,6 +41,18 @@ class DifferTest extends TestCase
         $pathFile2 = 'tests/fixtures/filepath2.yml';
 
         $diff = trim(genDiff($pathFile1, $pathFile2));
+
+        $this->assertEquals(
+            $actual,
+            $diff
+        );
+
+        $pathFile1 = 'tests/fixtures/file1.json';
+        $pathFile2 = 'tests/fixtures/file2.json';
+
+        $diff = trim(genDiff($pathFile1, $pathFile2));
+
+        $actual = trim(file_get_contents('tests/fixtures/diff-actual-1.txt'));
 
         $this->assertEquals(
             $actual,

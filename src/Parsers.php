@@ -6,11 +6,11 @@ namespace Differ\Parsers;
 
 use Symfony\Component\Yaml\Yaml;
 
-function parseFile(string $filePath): array
+function parseFile(string $filePath): object
 {
     try {
         $value = Yaml::parseFile($filePath, Yaml::PARSE_OBJECT_FOR_MAP);
-        return (array) $value;
+        return $value;
     } catch (ParseException $exception) {
         printf('Unable to parse the YAML string: %s', $exception->getMessage());
     }
