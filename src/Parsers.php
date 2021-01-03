@@ -14,5 +14,4 @@ function parseFile(string $filePath): object
     } catch (ParseException $exception) {
         printf('Unable to parse the YAML string: %s', $exception->getMessage());
     }
-
 }

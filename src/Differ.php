@@ -45,12 +45,9 @@ function buildDiff($firstData, $secondData): array
         }
 
         if ($secondData[$key] !== $firstData[$key]) {
-            return ['key' => $key, 'status' => 'changed', 'oldValue' => $firstData[$key], 'newValue' => $secondData[$key]];
+            return ['key' => $key,'status' => 'changed','oldValue' => $firstData[$key],'newValue' => $secondData[$key]];
         }
 
         return ['key' => $key, 'status' => 'unchanged', 'value' => $firstData[$key]];
-
     }, $keys);
 }
-
-

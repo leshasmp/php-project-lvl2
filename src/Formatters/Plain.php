@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Differ\Formatters\Plain;
 
-function formatDiff($resKeysStatus, $parentName = ''): string
+function formatDiff(array $resKeysStatus, string $parentName = ''): string
 {
     $resItems = array_map(function ($item) use ($parentName) {
         switch ($item['status']) {
@@ -39,7 +39,10 @@ function formatDiff($resKeysStatus, $parentName = ''): string
                 $oldValue = is_object($item['oldValue']) ? '[complex value]' : $item['oldValue'];
                 $newValue = is_object($item['newValue']) ? '[complex value]' : $item['newValue'];
                 return "\nProperty '{$parentName}' was updated. From '{$oldValue}' to '{$newValue}'";
-
+            case 'unchanged':
+                break;
+            default:
+                throw new \Exception("Unknown status item: {$item['status']}!");
         }
     }, $resKeysStatus);
 

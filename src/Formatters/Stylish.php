@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Differ\Formatters\Stylish;
 
-function formatDiff($resKeysStatus, $depth = 1): string
+function formatDiff(array $resKeysStatus, int $depth = 1): string
 {
     $resItems = array_map(function ($item) use ($depth) {
         $tab = str_repeat(' ', 4 * $depth - 2);
@@ -25,6 +25,8 @@ function formatDiff($resKeysStatus, $depth = 1): string
             case 'unchanged':
                 $value = toString($item['value'], $depth + 1);
                 return "\n{$tab}  {$item['key']}: {$value}";
+            default:
+                throw new \Exception("Unknown status item: {$item['status']}!");
         }
     }, $resKeysStatus);
 
@@ -34,7 +36,7 @@ function formatDiff($resKeysStatus, $depth = 1): string
     return "{{$resItems}\n$tab}";
 }
 
-function toString($value, $depth = 1)
+function toString($value, int $depth = 1)
 {
     if (!is_object($value)) {
         return $value;

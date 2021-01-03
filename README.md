@@ -17,10 +17,22 @@ Difference Calculator - A program that determines the difference between two dat
 
 ./bin/gendiff firstFile secondFile
 
+### Comparing flat files
+
 [![asciicast](https://asciinema.org/a/380023.svg)](https://asciinema.org/a/380023)
+
+### Comparison of flat file format yml and json
 
 [![asciicast](https://asciinema.org/a/380379.svg)](https://asciinema.org/a/380379)
 
+### Compare attachments
+
 [![asciicast](https://asciinema.org/a/382220.svg)](https://asciinema.org/a/382220)
 
+### Comparing file attachments with format output 'plain'
+
 [![asciicast](https://asciinema.org/a/382314.svg)](https://asciinema.org/a/382314)
+
+### Comparing file attachments with format output 'json'
+
+[![asciicast](https://asciinema.org/a/382328.svg)](https://asciinema.org/a/382328)
