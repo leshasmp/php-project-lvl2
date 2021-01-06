@@ -10,8 +10,11 @@ use function Funct\Collection\union;
 
 function genDiff(string $pathFile1, string $pathFile2, $formatName = 'stylish'): string
 {
-    $firstData = get_object_vars(parseFile($pathFile1));
-    $secondData = get_object_vars(parseFile($pathFile2));
+    $strFirst = file_get_contents($pathFile1);
+    $strSecond = file_get_contents($pathFile2);
+
+    $firstData = get_object_vars(parseFile($strFirst));
+    $secondData = get_object_vars(parseFile($strSecond));
 
     $diffData = buildDiff($firstData, $secondData);
 
