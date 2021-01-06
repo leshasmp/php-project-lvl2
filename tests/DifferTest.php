@@ -10,69 +10,36 @@ use function Differ\Differ\genDiff;
 
 class DifferTest extends TestCase
 {
-    public function testDifferString(): void
+    public function getFixturesPath(): string
     {
+        return __DIR__ . '/fixtures';
+    }
 
-        $pathFile1 = 'tests/fixtures/filepath1.json';
-        $pathFile2 = 'tests/fixtures/filepath2.json';
+    /**
+     * @dataProvider additionProvider
+     */
+    public function testPowerOfString($expected, $argument1, $argument2, $argument3)
+    {
+        $this->assertEquals($expected, genDiff($argument1, $argument2, $argument3));
+    }
 
-        $diff = trim(genDiff($pathFile1, $pathFile2));
+    public function additionProvider(): array
+    {
+        $fixturesPath = $this->getFixturesPath();
+        $pathFile1 = "{$fixturesPath}/filepath1.json";
+        $pathFile2 = "{$fixturesPath}/filepath2.json";
+        $pathFile3 = "{$fixturesPath}/filepath1.yml";
+        $pathFile4 = "{$fixturesPath}/filepath2.yml";
+        $pathFile5 = "{$fixturesPath}/file1.json";
+        $pathFile6 = "{$fixturesPath}/file2.json";
 
-        $actual = trim(file_get_contents('tests/fixtures/diff-actual.txt'));
-
-        $this->assertEquals(
-            $actual,
-            $diff
-        );
-
-        $pathFile1 = 'tests/fixtures/filepath1.json';
-        $pathFile2 = 'tests/fixtures/filepath2.yml';
-
-        $diff = trim(genDiff($pathFile1, $pathFile2));
-
-        $this->assertEquals(
-            $actual,
-            $diff
-        );
-
-        $pathFile1 = 'tests/fixtures/filepath1.yml';
-        $pathFile2 = 'tests/fixtures/filepath2.yml';
-
-        $diff = trim(genDiff($pathFile1, $pathFile2));
-
-        $this->assertEquals(
-            $actual,
-            $diff
-        );
-
-        $pathFile1 = 'tests/fixtures/file1.json';
-        $pathFile2 = 'tests/fixtures/file2.json';
-
-        $diff = trim(genDiff($pathFile1, $pathFile2));
-
-        $actual = trim(file_get_contents('tests/fixtures/diff-actual-1.txt'));
-
-        $this->assertEquals(
-            $actual,
-            $diff
-        );
-
-        $diff = trim(genDiff($pathFile1, $pathFile2, 'plain'));
-
-        $actual = trim(file_get_contents('tests/fixtures/diff-actual-plain.txt'));
-
-        $this->assertEquals(
-            $actual,
-            $diff
-        );
-
-        $diff = trim(genDiff($pathFile1, $pathFile2, 'json'));
-
-        $actual = trim(file_get_contents('tests/fixtures/diff-actual-json.txt'));
-
-        $this->assertEquals(
-            $actual,
-            $diff
-        );
+        return [
+            [file_get_contents("{$fixturesPath}/diff-actual.txt"), $pathFile1, $pathFile2, 'stylish'],
+            [file_get_contents("{$fixturesPath}/diff-actual.txt"), $pathFile1, $pathFile4, 'stylish'],
+            [file_get_contents("{$fixturesPath}/diff-actual.txt"), $pathFile3, $pathFile4, 'stylish'],
+            [file_get_contents("{$fixturesPath}/diff-actual-1.txt"), $pathFile5, $pathFile6, 'stylish'],
+            [file_get_contents("{$fixturesPath}/diff-actual-plain.txt"), $pathFile5, $pathFile6, 'plain'],
+            [file_get_contents("{$fixturesPath}/diff-actual-json.txt"), $pathFile5, $pathFile6, 'json'],
+        ];
     }
 }
