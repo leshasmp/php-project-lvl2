@@ -10,36 +10,34 @@ use function Differ\Differ\genDiff;
 
 class DifferTest extends TestCase
 {
-    public function getFixturesPath(): string
+    public function getFixturesPath(string $fixtureName): string
     {
-        return __DIR__ . '/fixtures';
+        $path = [ __DIR__, 'fixtures', $fixtureName];
+        return implode('/', $path);
     }
 
     /**
      * @dataProvider additionProvider
      */
-    public function testPowerOfString($expected, $argument1, $argument2, $argument3)
+    public function testDiff($expected, $pathFile1, $pathFile2, $format)
     {
-        $this->assertEquals($expected, genDiff($argument1, $argument2, $argument3));
+        $this->assertStringEqualsFile($expected, genDiff($pathFile1, $pathFile2, $format));
     }
 
     public function additionProvider(): array
     {
-        $fixturesPath = $this->getFixturesPath();
-        $pathFile1 = "{$fixturesPath}/filepath1.json";
-        $pathFile2 = "{$fixturesPath}/filepath2.json";
-        $pathFile3 = "{$fixturesPath}/filepath1.yml";
-        $pathFile4 = "{$fixturesPath}/filepath2.yml";
-        $pathFile5 = "{$fixturesPath}/file1.json";
-        $pathFile6 = "{$fixturesPath}/file2.json";
+        $fixtureJsonPath1 = $this->getFixturesPath('file1.json');
+        $fixtureJsonPath2 = $this->getFixturesPath('file2.json');
+        $fixtureYmlPath1 = $this->getFixturesPath('file1.yml');
+        $fixtureYmlPath2 = $this->getFixturesPath('file2.yml');
 
         return [
-            [file_get_contents("{$fixturesPath}/diff-actual.txt"), $pathFile1, $pathFile2, 'stylish'],
-            [file_get_contents("{$fixturesPath}/diff-actual.txt"), $pathFile1, $pathFile4, 'stylish'],
-            [file_get_contents("{$fixturesPath}/diff-actual.txt"), $pathFile3, $pathFile4, 'stylish'],
-            [file_get_contents("{$fixturesPath}/diff-actual-1.txt"), $pathFile5, $pathFile6, 'stylish'],
-            [file_get_contents("{$fixturesPath}/diff-actual-plain.txt"), $pathFile5, $pathFile6, 'plain'],
-            [file_get_contents("{$fixturesPath}/diff-actual-json.txt"), $pathFile5, $pathFile6, 'json'],
+            [$this->getFixturesPath('diff-actual-1.txt'), $fixtureJsonPath1, $fixtureJsonPath2, 'stylish'],
+            [$this->getFixturesPath('diff-actual-plain.txt'), $fixtureJsonPath1, $fixtureJsonPath2, 'plain'],
+            [$this->getFixturesPath('diff-actual-json.txt'), $fixtureJsonPath1, $fixtureJsonPath2, 'json'],
+            [$this->getFixturesPath('diff-actual-1.txt'), $fixtureYmlPath1, $fixtureYmlPath2, 'stylish'],
+            [$this->getFixturesPath('diff-actual-plain.txt'), $fixtureYmlPath1, $fixtureYmlPath2, 'plain'],
+            [$this->getFixturesPath('diff-actual-json.txt'), $fixtureYmlPath1, $fixtureYmlPath2, 'json'],
         ];
     }
 }
