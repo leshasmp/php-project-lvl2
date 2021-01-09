@@ -8,10 +8,5 @@ use Symfony\Component\Yaml\Yaml;
 
 function parseFile(string $filePath): object
 {
-    try {
-        $value = Yaml::parse($filePath, Yaml::PARSE_OBJECT_FOR_MAP);
-        return $value;
-    } catch (ParseException $exception) {
-        printf('Unable to parse the YAML string: %s', $exception->getMessage());
-    }
+    return Yaml::parse($filePath, Yaml::PARSE_OBJECT_FOR_MAP);
 }
