@@ -8,23 +8,29 @@ use function Differ\Parsers\parseFile;
 use function Differ\Formatters\formatting;
 use function Funct\Collection\union;
 
+function getContentFile(string $filePath): string
+{
+    return file_get_contents($filePath);
+}
+
 function genDiff(string $pathFile1, string $pathFile2, $formatName = 'stylish'): string
 {
-    $strFirst = file_get_contents($pathFile1);
-    $strSecond = file_get_contents($pathFile2);
+    $rawData1 = getContentFile($pathFile1);
+    $rawData2 = getContentFile($pathFile2);
 
-    $firstData = get_object_vars(parseFile($strFirst));
-    $secondData = get_object_vars(parseFile($strSecond));
+    $firstData = parseFile($rawData1);
+    $secondData = parseFile($rawData2);
 
     $diffData = buildDiff($firstData, $secondData);
 
-    $diffStr = formatting($formatName, $diffData);
-
-    return "$diffStr\n";
+    return trim(formatting($formatName, $diffData));
 }
 
 function buildDiff($firstData, $secondData): array
 {
+    $firstData = get_object_vars($firstData);
+    $secondData = get_object_vars($secondData);
+
     $firstKeys = array_keys($firstData);
     $secondKeys = array_keys($secondData);
 
@@ -42,9 +48,7 @@ function buildDiff($firstData, $secondData): array
         }
 
         if (is_object($firstData[$key]) && is_object($secondData[$key])) {
-            $firstData = get_object_vars($firstData[$key]);
-            $secondData = get_object_vars($secondData[$key]);
-            return ['key' => $key, 'status' => 'nested', 'children' => buildDiff($firstData, $secondData)];
+            return ['key' => $key, 'status' => 'nested', 'children' => buildDiff($firstData[$key], $secondData[$key])];
         }
 
         if ($secondData[$key] !== $firstData[$key]) {
