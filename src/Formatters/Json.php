@@ -8,22 +8,18 @@ function formatDiff(array $resKeysStatus): array
 {
     return array_map(function ($item) {
         switch ($item['status']) {
+            case 'unchanged':
+            case 'added':
             case 'deleted':
                 $value = toArray($item['value']);
-                return [" - {$item['key']}" => $value];
-            case 'added':
-                $value = toArray($item['value']);
-                return [" + {$item['key']}" => $value];
+                return [$item['key'] => $value];
             case 'nested':
                 $value = formatDiff($item['children']);
-                return [" + {$item['key']}" => $value];
+                return [$item['key'] => $value];
             case 'changed':
                 $value1 = toArray($item['oldValue']);
                 $value2 = toArray($item['newValue']);
-                return [" - {$item['key']}" => $value1, " + {$item['key']}" => $value2];
-            case 'unchanged':
-                $value = toArray($item['value']);
-                return [$item['key'] => $value];
+                return [$item['key'] => $value1, $item['key'] => $value2];
             default:
                 throw new \Exception("Unknown status item: {$item['status']}!");
         }

@@ -39,7 +39,7 @@ function formatDiff(array $resKeysStatus, int $depth = 1): string
 function toString($value, int $depth = 1)
 {
     if (!is_object($value)) {
-        return $value;
+        return formatValue($value);
     }
 
     $array = get_object_vars($value);
@@ -59,4 +59,17 @@ function toString($value, int $depth = 1)
     $resItems = implode($result);
 
     return "{{$resItems}\n$tab}";
+}
+
+function formatValue($value): string
+{
+    if (is_object($value)) {
+        return '[complex value]';
+    }
+    return match ($value) {
+        null => 'null',
+        true => 'true',
+        false => 'false',
+    default => "$value",
+    };
 }
