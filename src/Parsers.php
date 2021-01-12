@@ -6,7 +6,13 @@ namespace Differ\Parsers;
 
 use Symfony\Component\Yaml\Yaml;
 
-function parseFile(string $filePath): object
+function parse(string $data, string $extension): object
 {
-    return Yaml::parse($filePath, Yaml::PARSE_OBJECT_FOR_MAP);
+    if ($extension == 'json') {
+        return json_decode($data, false);
+    }
+
+    if ($extension == 'yml') {
+        return Yaml::parse($data, Yaml::PARSE_OBJECT_FOR_MAP);
+    }
 }
