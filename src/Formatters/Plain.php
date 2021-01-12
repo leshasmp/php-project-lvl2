@@ -4,54 +4,41 @@ declare(strict_types=1);
 
 namespace Differ\Formatters\Plain;
 
-function formatValue($value): string
+function stringify($value): string
 {
     if (is_object($value)) {
         return '[complex value]';
     }
-    return match ($value) {
-        null => 'null',
-        true => 'true',
-        false => 'false',
-    default => "'$value'",
-    };
+
+    if (is_null($value)) {
+        return 'null';
+    }
+
+    if (is_bool($value)) {
+        return $value ? 'true' : 'false';
+    }
+
+    return "'$value'";
 }
 
 function formatDiff(array $resKeysStatus, string $parentName = ''): string
 {
     $resItems = array_map(function ($item) use ($parentName) {
+
+        $propertyName = empty($parentName) ? "{$item['key']}" : "$parentName.{$item['key']}";
+
         switch ($item['status']) {
             case 'deleted':
-                if (strlen($parentName)) {
-                    $parentName .= ".{$item['key']}";
-                } else {
-                    $parentName = "{$item['key']}";
-                }
-                return "\nProperty '{$parentName}' was removed";
+                return "Property '{$propertyName}' was removed";
             case 'added':
-                $value = formatValue($item['value']);
-                if (strlen($parentName)) {
-                    $parentName .= ".{$item['key']}";
-                } else {
-                    $parentName = "{$item['key']}";
-                }
-                return "\nProperty '{$parentName}' was added with value: $value";
+                $value = stringify($item['value']);
+                return "Property '{$propertyName}' was added with value: $value";
             case 'nested':
-                if (strlen($parentName)) {
-                    $parentName .= ".{$item['key']}";
-                } else {
-                    $parentName = "{$item['key']}";
-                }
-                return formatDiff($item['children'], $parentName);
+                return formatDiff($item['children'], $propertyName);
             case 'changed':
-                if (strlen($parentName)) {
-                    $parentName .= ".{$item['key']}";
-                } else {
-                    $parentName = "{$item['key']}";
-                }
-                $oldValue = formatValue($item['oldValue']);
-                $newValue = formatValue($item['newValue']);
-                return "\nProperty '{$parentName}' was updated. From $oldValue to $newValue";
+                $oldValue = stringify($item['oldValue']);
+                $newValue = stringify($item['newValue']);
+                return "Property '{$propertyName}' was updated. From $oldValue to $newValue";
             case 'unchanged':
                 break;
             default:
@@ -59,7 +46,11 @@ function formatDiff(array $resKeysStatus, string $parentName = ''): string
         }
     }, $resKeysStatus);
 
-    $resItems = implode($resItems);
+    $resItems = array_filter($resItems, function ($element) {
+        return !empty($element);
+    });
+
+    $resItems = implode("\n", $resItems);
 
     return "{$resItems}";
 }
