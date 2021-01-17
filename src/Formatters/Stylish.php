@@ -6,12 +6,12 @@ namespace Differ\Formatters\Stylish;
 
 function formatDiff(array $tree): string
 {
-    return formatDiffData($tree);
+    return format($tree);
 }
 
-function formatDiffData(array $tree, int $depth = 1): string
+function format(array $tree, int $depth = 1): string
 {
-    $resItems = array_map(function ($item) use ($depth) {
+    $iter = array_map(function ($item) use ($depth) {
         $tab = str_repeat(' ', 4 * $depth - 2);
         switch ($item['type']) {
             case 'deleted':
@@ -21,7 +21,7 @@ function formatDiffData(array $tree, int $depth = 1): string
                 $value = stringify($item['value'], $depth + 1);
                 return "{$tab}+ {$item['key']}: {$value}";
             case 'nested':
-                $value = formatDiffData($item['children'], $depth + 1);
+                $value = format($item['children'], $depth + 1);
                 return "{$tab}  {$item['key']}: {$value}";
             case 'changed':
                 $value1 = stringify($item['oldValue'], $depth + 1);
@@ -35,7 +35,7 @@ function formatDiffData(array $tree, int $depth = 1): string
         }
     }, $tree);
 
-    $result = implode("\n", $resItems);
+    $result = implode("\n", $iter);
 
     $tab = str_repeat(' ', 4 * $depth - 4);
 
