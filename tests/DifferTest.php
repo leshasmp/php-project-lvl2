@@ -32,10 +32,11 @@ class DifferTest extends TestCase
         $fixtureYmlPath2 = $this->getFixturesPath('file2.yml');
 
         return [
-            [$this->getFixturesPath('diff-actual-1.txt'), $fixtureJsonPath1, $fixtureJsonPath2, 'stylish'],
+            [$this->getFixturesPath('diff-actual-stylish.txt'), $fixtureJsonPath1, $fixtureJsonPath2, 'stylish'],
             [$this->getFixturesPath('diff-actual-plain.txt'), $fixtureJsonPath1, $fixtureJsonPath2, 'plain'],
-            [$this->getFixturesPath('diff-actual-1.txt'), $fixtureYmlPath1, $fixtureYmlPath2, 'stylish'],
+            [$this->getFixturesPath('diff-actual-stylish.txt'), $fixtureYmlPath1, $fixtureYmlPath2, 'stylish'],
             [$this->getFixturesPath('diff-actual-plain.txt'), $fixtureYmlPath1, $fixtureYmlPath2, 'plain'],
+            [$this->getFixturesPath('diff-actual-json.txt'), $fixtureYmlPath1, $fixtureYmlPath2, 'json'],
         ];
     }
 }
