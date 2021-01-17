@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Differ\Formatters;
 
-function formatting($formatName, $diffData): string
+function format($formatName, $diffData): string
 {
     return match ($formatName) {
         'stylish' => Stylish\formatDiff($diffData),

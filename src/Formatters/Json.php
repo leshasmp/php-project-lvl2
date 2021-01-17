@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Differ\Formatters\Json;
 
-function formatDiff(array $resKeysStatus): array
+function formatDiff(array $resKeysType): array
 {
     return array_map(function ($item) {
-        switch ($item['status']) {
+        switch ($item['type']) {
             case 'unchanged':
             case 'added':
             case 'deleted':
@@ -21,9 +21,9 @@ function formatDiff(array $resKeysStatus): array
                 $value2 = toArray($item['newValue']);
                 return [$item['key'] => $value1, $item['key'] => $value2];
             default:
-                throw new \Exception("Unknown status item: {$item['status']}!");
+                throw new \Exception("Unknown type item: {$item['type']}!");
         }
-    }, $resKeysStatus);
+    }, $resKeysType);
 }
 
 function toArray($value)

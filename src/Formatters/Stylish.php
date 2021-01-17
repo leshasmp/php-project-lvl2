@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Differ\Formatters\Stylish;
 
-function formatDiff(array $resKeysStatus, int $depth = 1): string
+function formatDiff(array $resKeysType, int $depth = 1): string
 {
     $resItems = array_map(function ($item) use ($depth) {
         $tab = str_repeat(' ', 4 * $depth - 2);
-        switch ($item['status']) {
+        switch ($item['type']) {
             case 'deleted':
                 $value = stringify($item['value'], $depth + 1);
                 return "{$tab}- {$item['key']}: {$value}";
@@ -26,9 +26,9 @@ function formatDiff(array $resKeysStatus, int $depth = 1): string
                 $value = stringify($item['value'], $depth + 1);
                 return "{$tab}  {$item['key']}: {$value}";
             default:
-                throw new \Exception("Unknown status item: {$item['status']}!");
+                throw new \Exception("Unknown type item: {$item['type']}!");
         }
-    }, $resKeysStatus);
+    }, $resKeysType);
 
     $resItems = implode("\n", $resItems);
 

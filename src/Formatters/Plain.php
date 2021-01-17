@@ -21,13 +21,13 @@ function stringify($value): string
     return "'$value'";
 }
 
-function formatDiff(array $resKeysStatus, string $parentName = ''): string
+function formatDiff(array $resKeysType, string $parentName = ''): string
 {
     $resItems = array_map(function ($item) use ($parentName) {
 
         $propertyName = empty($parentName) ? "{$item['key']}" : "$parentName.{$item['key']}";
 
-        switch ($item['status']) {
+        switch ($item['type']) {
             case 'deleted':
                 return "Property '{$propertyName}' was removed";
             case 'added':
@@ -42,9 +42,9 @@ function formatDiff(array $resKeysStatus, string $parentName = ''): string
             case 'unchanged':
                 break;
             default:
-                throw new \Exception("Unknown status item: {$item['status']}!");
+                throw new \Exception("Unknown type item: {$item['type']}!");
         }
-    }, $resKeysStatus);
+    }, $resKeysType);
 
     $resItems = array_filter($resItems, function ($element) {
         return !empty($element);
