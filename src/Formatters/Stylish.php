@@ -4,7 +4,12 @@ declare(strict_types=1);
 
 namespace Differ\Formatters\Stylish;
 
-function formatDiff(array $resKeysType, int $depth = 1): string
+function formatDiff(array $tree): string
+{
+    return formatDiffData($tree);
+}
+
+function formatDiffData(array $tree, int $depth = 1): string
 {
     $resItems = array_map(function ($item) use ($depth) {
         $tab = str_repeat(' ', 4 * $depth - 2);
@@ -16,7 +21,7 @@ function formatDiff(array $resKeysType, int $depth = 1): string
                 $value = stringify($item['value'], $depth + 1);
                 return "{$tab}+ {$item['key']}: {$value}";
             case 'nested':
-                $value = formatDiff($item['children'], $depth + 1);
+                $value = formatDiffData($item['children'], $depth + 1);
                 return "{$tab}  {$item['key']}: {$value}";
             case 'changed':
                 $value1 = stringify($item['oldValue'], $depth + 1);
@@ -28,13 +33,13 @@ function formatDiff(array $resKeysType, int $depth = 1): string
             default:
                 throw new \Exception("Unknown type item: {$item['type']}!");
         }
-    }, $resKeysType);
+    }, $tree);
 
-    $resItems = implode("\n", $resItems);
+    $result = implode("\n", $resItems);
 
     $tab = str_repeat(' ', 4 * $depth - 4);
 
-    return "{\n{$resItems}\n$tab}";
+    return "{\n{$result}\n$tab}";
 }
 
 function stringify($value, int $depth = 1)
@@ -65,7 +70,7 @@ function stringify($value, int $depth = 1)
 
     $tab = str_repeat(' ', 4 * $depth - 4);
 
-    $resItems = implode("\n", $resItems);
+    $result = implode("\n", $resItems);
 
-    return "{\n{$resItems}\n$tab}";
+    return "{\n{$result}\n$tab}";
 }

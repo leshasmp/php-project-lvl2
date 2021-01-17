@@ -21,7 +21,12 @@ function stringify($value): string
     return "'$value'";
 }
 
-function formatDiff(array $resKeysType, string $parentName = ''): string
+function formatDiff(array $tree): string
+{
+    return formatDiffData($tree);
+}
+
+function formatDiffData(array $tree, string $parentName = ''): string
 {
     $resItems = array_map(function ($item) use ($parentName) {
 
@@ -34,23 +39,19 @@ function formatDiff(array $resKeysType, string $parentName = ''): string
                 $value = stringify($item['value']);
                 return "Property '{$propertyName}' was added with value: $value";
             case 'nested':
-                return formatDiff($item['children'], $propertyName);
+                return formatDiffData($item['children'], $propertyName);
             case 'changed':
                 $oldValue = stringify($item['oldValue']);
                 $newValue = stringify($item['newValue']);
                 return "Property '{$propertyName}' was updated. From $oldValue to $newValue";
             case 'unchanged':
-                break;
+                return '';
             default:
                 throw new \Exception("Unknown type item: {$item['type']}!");
         }
-    }, $resKeysType);
+    }, $tree);
 
-    $resItems = array_filter($resItems, function ($element) {
-        return !empty($element);
-    });
+    $filtered = array_filter($resItems, fn ($element) => !empty($element));
 
-    $resItems = implode("\n", $resItems);
-
-    return "{$resItems}";
+    return implode("\n", $filtered);
 }
