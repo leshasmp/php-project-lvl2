@@ -18,6 +18,10 @@ function stringify($value): string
         return $value ? 'true' : 'false';
     }
 
+    if (is_int($value)) {
+        return "$value";
+    }
+
     return "'$value'";
 }
 
