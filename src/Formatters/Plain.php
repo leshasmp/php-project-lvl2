@@ -21,12 +21,12 @@ function stringify($value): string
     return "'$value'";
 }
 
-function formatDiff(array $tree): string
+function format(array $tree): string
 {
-    return format($tree);
+    return formatDiff($tree);
 }
 
-function format(array $tree, string $parentName = ''): string
+function formatDiff(array $tree, string $parentName = ''): string
 {
     $filtered = array_filter($tree, fn ($element) => $element['type'] !== 'unchanged');
 
@@ -41,7 +41,7 @@ function format(array $tree, string $parentName = ''): string
                 $value = stringify($item['value']);
                 return "Property '{$propertyName}' was added with value: $value";
             case 'nested':
-                return format($item['children'], $propertyName);
+                return formatDiff($item['children'], $propertyName);
             case 'changed':
                 $oldValue = stringify($item['oldValue']);
                 $newValue = stringify($item['newValue']);

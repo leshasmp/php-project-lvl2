@@ -6,10 +6,14 @@ namespace Differ\Formatters;
 
 function format($formatName, $diffData): string
 {
-    return match ($formatName) {
-        'stylish' => Stylish\formatDiff($diffData),
-        'plain' => Plain\formatDiff($diffData),
-        'json' => json_encode($diffData),
-    default => throw new \Exception("Unknown format name: {$formatName}!"),
-    };
+    switch ($formatName) {
+        case 'stylish':
+            return Stylish\format($diffData);
+        case 'plain':
+            return Plain\format($diffData);
+        case 'json':
+            return json_encode($diffData);
+        default:
+            throw new \Exception("Unknown format name: {$formatName}!");
+    }
 }

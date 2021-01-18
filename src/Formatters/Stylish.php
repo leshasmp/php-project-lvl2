@@ -4,32 +4,32 @@ declare(strict_types=1);
 
 namespace Differ\Formatters\Stylish;
 
-function formatDiff(array $tree): string
+function format(array $tree): string
 {
-    return format($tree);
+    return formatDiff($tree);
 }
 
-function format(array $tree, int $depth = 1): string
+function formatDiff(array $tree, int $depth = 1): string
 {
     $iter = array_map(function ($item) use ($depth) {
-        $tab = str_repeat(' ', 4 * $depth - 2);
+        $indent = str_repeat(' ', 4 * $depth - 2);
         switch ($item['type']) {
             case 'deleted':
                 $value = stringify($item['value'], $depth + 1);
-                return "{$tab}- {$item['key']}: {$value}";
+                return "{$indent}- {$item['key']}: {$value}";
             case 'added':
                 $value = stringify($item['value'], $depth + 1);
-                return "{$tab}+ {$item['key']}: {$value}";
+                return "{$indent}+ {$item['key']}: {$value}";
             case 'nested':
-                $value = format($item['children'], $depth + 1);
-                return "{$tab}  {$item['key']}: {$value}";
+                $value = formatDiff($item['children'], $depth + 1);
+                return "{$indent}  {$item['key']}: {$value}";
             case 'changed':
                 $value1 = stringify($item['oldValue'], $depth + 1);
                 $value2 = stringify($item['newValue'], $depth + 1);
-                return "{$tab}- {$item['key']}: {$value1}\n{$tab}+ {$item['key']}: {$value2}";
+                return "{$indent}- {$item['key']}: {$value1}\n{$indent}+ {$item['key']}: {$value2}";
             case 'unchanged':
                 $value = stringify($item['value'], $depth + 1);
-                return "{$tab}  {$item['key']}: {$value}";
+                return "{$indent}  {$item['key']}: {$value}";
             default:
                 throw new \Exception("Unknown type item: {$item['type']}!");
         }
@@ -37,9 +37,9 @@ function format(array $tree, int $depth = 1): string
 
     $result = implode("\n", $iter);
 
-    $tab = str_repeat(' ', 4 * $depth - 4);
+    $indent = str_repeat(' ', 4 * $depth - 4);
 
-    return "{\n{$result}\n$tab}";
+    return "{\n{$result}\n$indent}";
 }
 
 function stringify($value, int $depth = 1)
@@ -60,17 +60,17 @@ function stringify($value, int $depth = 1)
     $keys = array_keys($array);
 
     $resItems = array_map(function ($key) use ($array, $depth) {
-        $tab = str_repeat(' ', 4 * $depth - 2);
+        $indent = str_repeat(' ', 4 * $depth - 2);
         $value = $array[$key];
         if (is_object($array[$key])) {
             $value = stringify($array[$key], $depth + 1);
         }
-        return "{$tab}  {$key}: {$value}";
+        return "{$indent}  {$key}: {$value}";
     }, $keys);
 
-    $tab = str_repeat(' ', 4 * $depth - 4);
+    $indent = str_repeat(' ', 4 * $depth - 4);
 
     $result = implode("\n", $resItems);
 
-    return "{\n{$result}\n$tab}";
+    return "{\n{$result}\n$indent}";
 }
