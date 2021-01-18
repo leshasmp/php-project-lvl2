@@ -26,9 +26,6 @@ jobs:
       - name: action lint
         run: make lint
 
-      - name: action test
-        run: make test
-
       - name: Run test & publish code coverage
         uses: paambaati/codeclimate-action@v2.6.0
 
