@@ -9,32 +9,42 @@ Difference Calculator - A program that determines the difference between two dat
 
 ### Installation
 
-composer install --global php-project-lvl2/php-project-lvl2
+#### Global
+
+composer global require php-project-lvl2/php-project-lvl2
+
+#### In project
 
 composer require php-project-lvl2/php-project-lvl2
 
 ## Usage
 
-### Comparison of flat files (JSON)
+### In CLI:
 
-./bin/gendiff firstFile secondFile
+gendiff [--format <fmt>] <path_to_file1> <path_to_file2>
+
+### In project:
+
+use function Differ\Differ\genDiff;
+
+genDiff($filepath1, $filepath2, $formatName = 'stylish');
 
 ### Comparing flat files
 
-[![asciicast](https://asciinema.org/a/380023.svg)](https://asciinema.org/a/380023)
+[![asciicast](https://asciinema.org/a/385395.svg)](https://asciinema.org/a/385395)
 
 ### Comparison of flat file format yml and json
 
-[![asciicast](https://asciinema.org/a/380379.svg)](https://asciinema.org/a/380379)
+[![asciicast](https://asciinema.org/a/385396.svg)](https://asciinema.org/a/385396)
 
 ### Compare attachments
 
-[![asciicast](https://asciinema.org/a/382220.svg)](https://asciinema.org/a/382220)
+[![asciicast](https://asciinema.org/a/385398.svg)](https://asciinema.org/a/385398)
 
 ### Comparing file attachments with format output 'plain'
 
-[![asciicast](https://asciinema.org/a/382314.svg)](https://asciinema.org/a/382314)
+[![asciicast](https://asciinema.org/a/385400.svg)](https://asciinema.org/a/385400)
 
 ### Comparing file attachments with format output 'json'
 
-[![asciicast](https://asciinema.org/a/382328.svg)](https://asciinema.org/a/382328)
+[![asciicast](https://asciinema.org/a/385402.svg)](https://asciinema.org/a/385402)
