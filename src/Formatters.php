@@ -8,11 +8,11 @@ function format(string $formatName, array $diffData): string
 {
     switch ($formatName) {
         case 'stylish':
-            return (string) Stylish\format($diffData);
+            return Stylish\format($diffData) ?? '';
         case 'plain':
-            return (string) Plain\format($diffData);
+            return Plain\format($diffData) ?? '';
         case 'json':
-            return (string) json_encode($diffData);
+            return json_encode($diffData) ?? '';
         default:
             throw new \Exception("Unknown format name: {$formatName}!");
     }

@@ -61,10 +61,7 @@ function stringify($value, int $depth = 1): string
 
     $resItems = array_map(function ($key) use ($array, $depth): string {
         $indent = str_repeat(' ', 4 * $depth - 2);
-        $value = $array[$key];
-        if (is_object($array[$key])) {
-            $value = stringify($array[$key], $depth + 1);
-        }
+        $value = is_object($array[$key]) ? stringify($array[$key], $depth + 1) : $array[$key];
         return "{$indent}  {$key}: {$value}";
     }, $keys);
 

@@ -30,13 +30,12 @@ function format(array $tree): string
     return formatDiff($tree);
 }
 
-function formatDiff(array $tree, string $parentName = ''): string
+function formatDiff(array $tree, $parentName = ''): string
 {
     $filtered = array_filter($tree, fn ($element) => $element['type'] !== 'unchanged');
 
-    $iter = array_map(function ($item) use ($parentName) {
-
-        $propertyName = empty($parentName) ? "{$item['key']}" : "$parentName.{$item['key']}";
+    $iter = array_map(function ($item) use ($parentName): string {
+        $propertyName = strlen($parentName) == 0 ? "{$item['key']}" : "$parentName.{$item['key']}";
 
         switch ($item['type']) {
             case 'deleted':
