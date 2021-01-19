@@ -11,7 +11,7 @@ function format(array $tree): string
 
 function formatDiff(array $tree, int $depth = 1): string
 {
-    $iter = array_map(function ($item) use ($depth) {
+    $iter = array_map(function ($item) use ($depth): string {
         $indent = str_repeat(' ', 4 * $depth - 2);
         switch ($item['type']) {
             case 'deleted':
@@ -42,7 +42,7 @@ function formatDiff(array $tree, int $depth = 1): string
     return "{\n{$result}\n$indent}";
 }
 
-function stringify($value, int $depth = 1)
+function stringify($value, int $depth = 1): string
 {
     if (!is_object($value)) {
         if (is_null($value)) {
@@ -59,7 +59,7 @@ function stringify($value, int $depth = 1)
     $array = get_object_vars($value);
     $keys = array_keys($array);
 
-    $resItems = array_map(function ($key) use ($array, $depth) {
+    $resItems = array_map(function ($key) use ($array, $depth): string {
         $indent = str_repeat(' ', 4 * $depth - 2);
         $value = $array[$key];
         if (is_object($array[$key])) {

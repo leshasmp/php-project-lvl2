@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Differ\Formatters;
 
-function format($formatName, $diffData): string
+function format(string $formatName, array $diffData): string
 {
     switch ($formatName) {
         case 'stylish':
-            return Stylish\format($diffData);
+            return (string) Stylish\format($diffData);
         case 'plain':
-            return Plain\format($diffData);
+            return (string) Plain\format($diffData);
         case 'json':
-            return json_encode($diffData);
+            return (string) json_encode($diffData);
         default:
             throw new \Exception("Unknown format name: {$formatName}!");
     }

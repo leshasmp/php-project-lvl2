@@ -7,15 +7,16 @@ namespace Differ\Differ;
 use function Differ\Parsers\parse;
 use function Differ\Formatters\format;
 use function Funct\Collection\union;
+use function Funct\Collection\sortBy;
 
 function getContentFile(string $filePath): string
 {
-    return file_get_contents($filePath);
+    return (string) file_get_contents($filePath);
 }
 
 function getExtension(string $filePath): string
 {
-    return pathinfo($filePath)['extension'];
+    return pathinfo($filePath)['extension'] ?? '';
 }
 
 function genDiff(string $filePath1, string $filePath2, $formatName = 'stylish'): string
@@ -37,7 +38,7 @@ function buildDiff(object $firstData, object $secondData): array
     $secondKeys = array_keys(get_object_vars($secondData));
 
     $keys = union($firstKeys, $secondKeys);
-    sort($keys);
+    $sortedKeys = array_values(sortBy($keys, fn($key) => $key));
 
     return array_map(function ($key) use ($firstData, $secondData) {
 
@@ -58,5 +59,5 @@ function buildDiff(object $firstData, object $secondData): array
         }
 
         return ['key' => $key, 'type' => 'unchanged', 'value' => $firstData->$key];
-    }, $keys);
+    }, $sortedKeys);
 }
