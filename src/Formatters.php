@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Differ\Formatters;
 
-function format(string $formatName, array $diffData): string|false
+function format(string $formatName, array $diffData)
 {
     switch ($formatName) {
         case 'stylish':
