@@ -18,11 +18,11 @@ function stringify($value): string
         return $value ? 'true' : 'false';
     }
 
-    if (is_int($value)) {
-        return "$value";
+    if (is_string($value)) {
+        return "'$value'";
     }
 
-    return "'$value'";
+    return "$value";
 }
 
 function format(array $tree): string
